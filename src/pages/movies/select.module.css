@@ -1,8 +1,10 @@
 .root {
   max-width: rem(284px);
+  width: 100%;
 }
 
 .input {
+  font-size: var(--mantine-font-size-sm);
   padding-inline-start: rem(12px);
   border: rem(1px) solid var(--mantine-color-gray-3);
   &:hover {
@@ -11,20 +13,6 @@
   &:where([data-expanded]) {
     border-color: var(--mantine-color-purple-5);
   }
-}
-
-.inputField {
-  font-size: var(--mantine-font-size-sm);
-  font-weight: 400;
-}
-
-.pill {
-  padding-left: 0;
-  background-color: transparent;
-}
-
-.pill button {
-  display: none;
 }
 
 .label {

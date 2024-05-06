@@ -1,96 +1,51 @@
-import { useState } from "react";
-import { AppShell, MultiSelect, Select } from "@mantine/core";
+import { AppShell, TextInput } from "@mantine/core";
 import { MainContainer } from "../../shared/ui/main-container/main-container";
 import { MainTitle } from "../../shared/ui/main-title/main-title";
-import classes from "./movies.module.css";
-import { CheckMark } from "./check-mark";
-
-const data = [
-  "Drama",
-  "Comedy",
-  "Animation",
-  "Thriller",
-  "Fantasy",
-  "check1",
-  "check2",
-  "check3",
-  "check4",
-];
+import { MultiSelectFilter } from "./components/multi-select-filter/multi-select-filter";
+import { useEffect, useState } from "react";
+import { getGenres } from "./api/get-genres";
+import { SelectFilter } from "./components/select-filter/select-filter";
+import { years } from "./utils/years";
+import { sortBy } from "./utils/sort-by";
+import classes from "./filter-section.module.css";
+import { InputRating } from "./components/input-rating/input-rating";
+import { ResetFiltersBtn } from "./components/reset-filters-btn/reset-filters-btn";
 
 export const MoviesPage = () => {
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const [value, setValue] = useState<string[]>([]);
+  const [genres, setGenres] = useState<string[]>([]);
+  useEffect(() => {
+    (async () => {
+      const genres = await getGenres();
+      setGenres(genres);
+    })();
+  }, []);
   return (
     <MainContainer size="md">
       <MainTitle>Movies</MainTitle>
-      <AppShell.Section>
-        <MultiSelect
-          classNames={{
-            ...classes,
-            section: `${classes.section} ${
-              isOpenDropdown ? classes.isOpenDropdown : ""
-            }`,
-          }}
-          withCheckIcon={false}
-          size="md"
-          radius="md"
-          label="Genres"
-          placeholder={!value.length ? "Select genre" : ""}
-          data={data}
-          maxDropdownHeight={224}
-          rightSection={
-            <CheckMark
-              stroke={
-                isOpenDropdown
-                  ? "var(--mantine-color-purple-5)"
-                  : "var(--mantine-color-gray-5)"
-              }
-            />
-          }
-          onChange={setValue}
-          comboboxProps={{
-            offset: 8,
-            onOpen() {
-              setIsOpenDropdown(true);
-            },
-            onClose() {
-              setIsOpenDropdown(false);
-            },
-          }}
-        />
-        {/* <Select
-          classNames={{
-            ...classes,
-            section: `${classes.section} ${
-              isOpenDropdown ? classes.isOpenDropdown : ""
-            }`,
-          }}
-          withCheckIcon={false}
-          size="md"
-          radius="md"
+      <AppShell.Section className={classes.section}>
+        <MultiSelectFilter
           label="Genres"
           placeholder="Select genre"
-          data={data}
-          maxDropdownHeight={224}
-          rightSection={
-            <CheckMark
-              stroke={
-                isOpenDropdown
-                  ? "var(--mantine-color-purple-5)"
-                  : "var(--mantine-color-gray-5)"
-              }
-            />
-          }
-          comboboxProps={{
-            offset: 8,
-            onOpen() {
-              setIsOpenDropdown(true);
-            },
-            onClose() {
-              setIsOpenDropdown(false);
-            },
-          }}
-        /> */}
+          data={genres}
+        />
+        <SelectFilter
+          label="Release year"
+          placeholder="Select release year"
+          data={years()}
+          allowDeselect
+        />
+        <div className={classes.rating}>
+          <InputRating placeholder="From" label="Ratings" />
+          <InputRating placeholder="To" />
+        </div>
+        <SelectFilter
+          label="Sort by"
+          data={sortBy}
+          allowDeselect={false}
+          defaultValue={sortBy[0]}
+          marginLeft="auto"
+        />
+        <ResetFiltersBtn />
       </AppShell.Section>
     </MainContainer>
   );
