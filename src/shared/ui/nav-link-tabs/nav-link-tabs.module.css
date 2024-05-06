@@ -20,7 +20,6 @@
 }
 .label {
   font-size: var(--mantine-font-size-md);
-  font-weight: 700;
   color: var(--mantine-color-black);
   &:hover {
     color: var(--mantine-color-purple-4);
@@ -29,6 +28,7 @@
 
 .root:where([data-active]) .body .label {
   color: var(--mantine-color-purple-5);
+  font-weight: 700;
   &:hover {
     color: var(--mantine-color-purple-5);
   }

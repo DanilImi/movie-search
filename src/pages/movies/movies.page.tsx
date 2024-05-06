@@ -1,4 +1,4 @@
-import { AppShell, TextInput } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { MainContainer } from "../../shared/ui/main-container/main-container";
 import { MainTitle } from "../../shared/ui/main-title/main-title";
 import { MultiSelectFilter } from "./components/multi-select-filter/multi-select-filter";
@@ -38,6 +38,7 @@ export const MoviesPage = () => {
           <InputRating placeholder="From" label="Ratings" />
           <InputRating placeholder="To" />
         </div>
+        <ResetFiltersBtn />
         <SelectFilter
           label="Sort by"
           data={sortBy}
@@ -45,7 +46,6 @@ export const MoviesPage = () => {
           defaultValue={sortBy[0]}
           marginLeft="auto"
         />
-        <ResetFiltersBtn />
       </AppShell.Section>
     </MainContainer>
   );

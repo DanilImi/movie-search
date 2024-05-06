@@ -11,15 +11,15 @@ export const ResetFiltersIcon = () => {
         <path
           d="M12 4L4 12"
           stroke="#9854F6"
-          stroke-width="1.5"
-          stroke-linecap="round"
+          strokeWidth="1.5"
+          strokeLinecap="round"
           stroke-linejoin="round"
         />
         <path
           d="M4 4L12 12"
           stroke="#9854F6"
-          stroke-width="1.5"
-          stroke-linecap="round"
+          strokeWidth="1.5"
+          strokeLinecap="round"
           stroke-linejoin="round"
         />
       </g>
