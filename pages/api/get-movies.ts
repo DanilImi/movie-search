@@ -1,11 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Method } from "../../src/shared/constants/http-method";
 
-type Genre = {
-  id: number;
-  name: string;
-};
-
 type ResponseData = {
   message?: string;
   results?: string[];
@@ -17,6 +12,7 @@ export default async function handler(
 ) {
   try {
     if (req.method === Method.GET) {
+      const {} = req.query;
       const options = {
         method: "GET",
         headers: {
@@ -26,18 +22,13 @@ export default async function handler(
       };
 
       const response = await fetch(
-        "https://api.themoviedb.org/3/genre/movie/list?language=en",
+        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc",
         options
       );
       const data = await response.json();
+      console.log("data:", data);
 
-      const genres = data.genres.map((genre: Genre) => {
-        return {
-          value: `${genre.id}`,
-          label: genre.name,
-        };
-      });
-      res.status(200).json(genres);
+      res.status(200).json({ message: "success" });
     } else {
       throw Error();
     }
