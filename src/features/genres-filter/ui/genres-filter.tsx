@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { MultiSelectFilter } from "../../../entities/select-filter";
 import { getGenres } from "../api/get-genres";
-import { Genre } from "../../../shared/type/type";
+import { SelectDataType } from "../../../shared/type/type";
+import { MultiSelectFilter } from "../../../entities/select-filter";
 
 export const GenresFilter = () => {
-  const [genres, setGenres] = useState<Genre[]>([]);
   const [valueInput, setValueInput] = useState<string[]>([]);
+  const [genres, setGenres] = useState<SelectDataType[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -21,6 +21,7 @@ export const GenresFilter = () => {
       data={genres}
       valueInput={valueInput}
       setValueInput={setValueInput}
+      filterName="with_genres"
     />
   );
 };

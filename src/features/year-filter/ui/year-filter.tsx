@@ -8,6 +8,7 @@ export const YearFilter = () => {
       placeholder="Select release year"
       data={years()}
       allowDeselect
+      filterName="primary_release_year"
     />
   );
 };

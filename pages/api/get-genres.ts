@@ -8,17 +8,16 @@ type Genre = {
 
 type ResponseData = {
   message?: string;
-  results?: string[];
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData | Genre[]>
 ) {
   try {
     if (req.method === Method.GET) {
       const options = {
-        method: "GET",
+        method: Method.GET,
         headers: {
           accept: "application/json",
           Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,

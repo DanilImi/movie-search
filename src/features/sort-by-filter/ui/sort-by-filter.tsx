@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { SelectFilter } from "../../../entities/select-filter";
 import { sortBy } from "../utils/sort-by";
+import { SelectFilter } from "../../../entities/select-filter";
 
 export const SortByFilter: FC = () => {
   return (
@@ -8,8 +8,9 @@ export const SortByFilter: FC = () => {
       label="Sort by"
       data={sortBy}
       allowDeselect={false}
-      defaultValue={sortBy[0]}
+      defaultSearchValue={sortBy[0].label}
       marginLeft="auto"
+      filterName="sort_by"
     />
   );
 };

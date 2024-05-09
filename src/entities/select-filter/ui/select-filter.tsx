@@ -1,15 +1,23 @@
 import { FC, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Select } from "@mantine/core";
+import { AppDispatch } from "../../../app";
 import classes from "../styles/select.module.css";
 import classesSelect from "../styles/select-filter.module.css";
 import classesScrollbar from "../styles/scrollbar.module.css";
 import { CheckMark } from "./check-mark";
+import { SelectDataType } from "../../../shared/type/type";
+import {
+  getMovies,
+  setFilter,
+} from "../../../app/store/get-movie/get-movies-slice";
 
 interface SelectFilterProps {
   label: string;
-  data: string[];
+  data: string[] | SelectDataType[];
+  filterName: string;
   allowDeselect: boolean;
-  defaultValue?: string;
+  defaultSearchValue?: string;
   placeholder?: string;
   marginLeft?: string;
 }
@@ -19,9 +27,11 @@ export const SelectFilter: FC<SelectFilterProps> = ({
   label,
   data,
   allowDeselect,
-  defaultValue,
+  defaultSearchValue,
   marginLeft,
+  filterName,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   return (
     <Select
@@ -52,7 +62,7 @@ export const SelectFilter: FC<SelectFilterProps> = ({
       comboboxProps={{
         offset: 8,
       }}
-      defaultValue={defaultValue}
+      defaultSearchValue={defaultSearchValue}
       allowDeselect={allowDeselect}
       withCheckIcon={false}
       size="md"
@@ -60,6 +70,10 @@ export const SelectFilter: FC<SelectFilterProps> = ({
       label={label}
       data={data}
       maxDropdownHeight={224}
+      onChange={(value) => {
+        dispatch(setFilter({ filterName: filterName, value: value }));
+        dispatch(getMovies());
+      }}
     />
   );
 };

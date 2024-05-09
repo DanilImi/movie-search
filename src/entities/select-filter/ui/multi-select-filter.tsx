@@ -1,16 +1,23 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
+import { useDispatch } from "react-redux";
 import { MultiSelect } from "@mantine/core";
 import classes from "../styles/select.module.css";
 import classesMultiSelect from "../styles/multi-select-filter.module.css";
 import classesScrollbar from "../styles/scrollbar.module.css";
 import { CheckMark } from "./check-mark";
-import { Genre } from "../../../shared/type/type";
+import { SelectDataType } from "../../../shared/type/type";
+import { AppDispatch } from "../../../app";
+import {
+  getMovies,
+  setFilter,
+} from "../../../app/store/get-movie/get-movies-slice";
 
 interface MultiSelectFilterProps {
   label: string;
   placeholder: string;
-  data: Genre[];
+  data: SelectDataType[];
   valueInput: string[];
+  filterName: string;
   setValueInput: Dispatch<SetStateAction<string[]>>;
 }
 
@@ -19,8 +26,10 @@ export const MultiSelectFilter: FC<MultiSelectFilterProps> = ({
   placeholder,
   data,
   valueInput,
+  filterName,
   setValueInput,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   return (
     <MultiSelect
@@ -31,7 +40,7 @@ export const MultiSelectFilter: FC<MultiSelectFilterProps> = ({
           isOpenDropdown ? classes.isOpenDropdown : ""
         }`,
       }}
-      placeholder={!valueInput.length ? placeholder : ""}
+      placeholder={!valueInput?.length ? placeholder : ""}
       scrollAreaProps={{
         classNames: classesScrollbar,
         type: "always",
@@ -56,7 +65,11 @@ export const MultiSelectFilter: FC<MultiSelectFilterProps> = ({
       label={label}
       data={data}
       maxDropdownHeight={224}
-      onChange={setValueInput}
+      onChange={(value) => {
+        setValueInput(value);
+        dispatch(setFilter({ filterName: filterName, value: value }));
+        dispatch(getMovies());
+      }}
     />
   );
 };
