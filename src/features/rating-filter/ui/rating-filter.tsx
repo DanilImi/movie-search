@@ -1,16 +1,32 @@
 import { FC } from "react";
 import { InputRating } from "../../../entities/input-rating";
 import classes from "../styles/rating-filter.module.css";
+import { GetInputPropsReturnType } from "@mantine/form/lib/types";
 
-export const RatingFilter: FC = () => {
+interface propsForm {
+  key: string;
+  getInputProps: GetInputPropsReturnType;
+}
+
+interface RatingFilter {
+  ratingFrom: propsForm;
+  ratingTo: propsForm;
+}
+
+export const RatingFilter: FC<RatingFilter> = ({ ratingFrom, ratingTo }) => {
   return (
     <div className={classes.rating}>
       <InputRating
         placeholder="From"
         label="Ratings"
-        filterName="vote_averageGte"
+        key={ratingFrom.key}
+        {...ratingFrom.getInputProps}
       />
-      <InputRating placeholder="To" filterName="vote_averageLte" />
+      <InputRating
+        placeholder="To"
+        key={ratingTo.key}
+        {...ratingTo.getInputProps}
+      />
     </div>
   );
 };

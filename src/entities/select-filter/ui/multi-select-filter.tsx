@@ -1,24 +1,16 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { useDispatch } from "react-redux";
+import { FC, useState } from "react";
 import { MultiSelect } from "@mantine/core";
 import classes from "../styles/select.module.css";
 import classesMultiSelect from "../styles/multi-select-filter.module.css";
 import classesScrollbar from "../styles/scrollbar.module.css";
 import { CheckMark } from "./check-mark";
 import { SelectDataType } from "../../../shared/type/type";
-import { AppDispatch } from "../../../app";
-import {
-  getMovies,
-  setFilter,
-} from "../../../app/store/get-movie/get-movies-slice";
 
 interface MultiSelectFilterProps {
   label: string;
   placeholder: string;
   data: SelectDataType[];
   valueInput: string[];
-  filterName: string;
-  setValueInput: Dispatch<SetStateAction<string[]>>;
 }
 
 export const MultiSelectFilter: FC<MultiSelectFilterProps> = ({
@@ -26,10 +18,8 @@ export const MultiSelectFilter: FC<MultiSelectFilterProps> = ({
   placeholder,
   data,
   valueInput,
-  filterName,
-  setValueInput,
+  ...props
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   return (
     <MultiSelect
@@ -65,11 +55,7 @@ export const MultiSelectFilter: FC<MultiSelectFilterProps> = ({
       label={label}
       data={data}
       maxDropdownHeight={224}
-      onChange={(value) => {
-        setValueInput(value);
-        dispatch(setFilter({ filterName: filterName, value: value }));
-        dispatch(getMovies());
-      }}
+      {...props}
     />
   );
 };
