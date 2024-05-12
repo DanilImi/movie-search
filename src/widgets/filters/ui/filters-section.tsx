@@ -1,27 +1,26 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "@mantine/form";
-import { AppDispatch, getMovies } from "../../../app";
-import classes from "./filters-section.module.css";
+import { Flex } from "@mantine/core";
+import { AppDispatch, getMovies, setFilters } from "../../../app";
 import { GenresFilter } from "../../../features/genres-filter";
 import { YearFilter } from "../../../features/year-filter";
 import { RatingFilter } from "../../../features/rating-filter";
 import { ResetFiltersBtn } from "../../../features/reset-filter";
 import { SortByFilter } from "../../../features/sort-by-filter";
+import { filters } from "../../../shared/constants/filters";
+import { CheckResetForm } from "../utils/check-reset-form";
 
 export const FiltersSection: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isResetValues, setIsResetValues] = useState(true);
 
-  const { getInputProps, key } = useForm({
+  const { getInputProps, key, reset } = useForm({
     mode: "uncontrolled",
-    initialValues: {
-      with_genres: [] as string[],
-      primary_release_year: "",
-      vote_averageLte: "",
-      vote_averageGte: "",
-      sort_by: "popularity.desc",
-    },
+    initialValues: { ...filters },
     onValuesChange: (values) => {
+      setIsResetValues(CheckResetForm(filters, values));
+      dispatch(setFilters({ ...values }));
       dispatch(getMovies(values));
     },
   });
@@ -36,18 +35,20 @@ export const FiltersSection: FC = () => {
   };
 
   return (
-    <form className={classes.section}>
-      <GenresFilter
-        key={key("with_genres")}
-        {...getInputProps("with_genres")}
-      />
-      <YearFilter
-        key={key("primary_release_year")}
-        {...getInputProps("primary_release_year")}
-      />
-      <RatingFilter ratingFrom={ratingFrom} ratingTo={ratingTo} />
-      <ResetFiltersBtn />
-      <SortByFilter key={key("sort_by")} {...getInputProps("sort_by")} />
+    <form>
+      <Flex wrap="wrap" justify="space-between" rowGap={24}>
+        <GenresFilter
+          key={key("with_genres")}
+          {...getInputProps("with_genres")}
+        />
+        <YearFilter
+          key={key("primary_release_year")}
+          {...getInputProps("primary_release_year")}
+        />
+        <RatingFilter ratingFrom={ratingFrom} ratingTo={ratingTo} />
+        <ResetFiltersBtn reset={reset} isResetValues={isResetValues} />
+        <SortByFilter key={key("sort_by")} {...getInputProps("sort_by")} />
+      </Flex>
     </form>
   );
 };

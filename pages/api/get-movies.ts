@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Method } from "../../src/shared/constants/http-method";
-import { Movie } from "../../src/shared/type/type";
+import { Movie, MoviesAndTotalPages } from "../../src/shared/type/type";
 
-type ResponseData = {
+type ResponseMessage = {
   message?: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData | Movie[]>
+  res: NextApiResponse<ResponseMessage | MoviesAndTotalPages>
 ) {
   try {
     if (req.method === Method.GET) {
@@ -35,6 +35,8 @@ export default async function handler(
       );
       const data = await response.json();
 
+      const total_pages = data.total_pages;
+
       const movies = data.results.map((movie: Movie) => {
         return {
           id: movie.id,
@@ -46,7 +48,7 @@ export default async function handler(
           genre_ids: movie.genre_ids,
         };
       });
-      res.status(200).json(movies);
+      res.status(200).json({ movies, total_pages });
     } else {
       throw Error();
     }

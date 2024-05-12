@@ -1,9 +1,10 @@
-import { Box, Group, Rating, Text, Image as ImageMantine } from "@mantine/core";
+import { Rating, Text, Image as ImageMantine, Flex } from "@mantine/core";
 import { FC } from "react";
 import Image from "next/image";
 import classes from "../styles/card-movie.module.css";
 import { MoviesWithGenresLabel } from "../../../shared/type/type";
 import { formatVote } from "../../../shared/utils/format-vote";
+import NoPoster from "../../../../public/no-poster.jpg";
 
 interface CardMovieProps {
   movie: MoviesWithGenresLabel;
@@ -18,14 +19,20 @@ export const CardMovie: FC<CardMovieProps> = ({ movie }) => {
     vote_count,
     genres_label,
   } = movie;
+
   const release_year = new Date(release_date).toLocaleDateString(undefined, {
     year: "numeric",
   });
+
+  const posterExist = poster_path
+    ? `https://image.tmdb.org/t/p/original/${poster_path}`
+    : NoPoster;
+
   return (
-    <Box className={classes.card}>
-      <Box className={classes.wrapper}>
+    <Flex className={classes.card} justify="space-between">
+      <Flex wrap="wrap" justify="space-between" maw={398} w="100%">
         <ImageMantine
-          src={`https://image.tmdb.org/t/p/original/${poster_path}`}
+          src={posterExist}
           w={119}
           h={170}
           width={119}
@@ -35,40 +42,35 @@ export const CardMovie: FC<CardMovieProps> = ({ movie }) => {
           fallbackSrc="/no-poster.png"
           alt="poster"
         />
-        <Box className={classes.detail_wrapper}>
-          <Group gap={8} className={classes.group}>
-            <Text
-              fw={600}
-              size="xl"
-              lineClamp={2}
-              c="var(--mantine-color-purple-5)"
-            >
+        <Flex direction="column" justify="space-between" maw={263} w="100%">
+          <Flex direction="column" align="flex-start">
+            <Text fw={600} size="xl" lineClamp={2} c="purple.5">
               {original_title}
             </Text>
-            <Text size="md" c="var(--mantine-color-gray-5)">
+            <Text size="md" c="gray.5">
               {release_year}
             </Text>
-            <Box className={classes.rating_vote_wrapper}>
+            <Flex align="center" gap={8}>
               <Rating size={"lg"} count={1} value={1} />
               <Text fw={600} size="md">
                 {vote_average.toFixed(1)}
               </Text>
-              <Text size="md" c="var(--mantine-color-gray-5)">
+              <Text size="md" c="gray.5">
                 ({formatVote(vote_count)})
               </Text>
-            </Box>
-          </Group>
-          <Box className={classes.genres_wrapper}>
-            <Text size="md" c="var(--mantine-color-gray-5)">
+            </Flex>
+          </Flex>
+          <Flex gap={8}>
+            <Text size="md" c="gray.5">
               Genres
             </Text>
             <Text size="md" truncate="end">
               {genres_label.join(", ")}
             </Text>
-          </Box>
-        </Box>
-      </Box>
-      <Rating count={1} size={"lg"} color="var(--mantine-color-purple-5)" />
-    </Box>
+          </Flex>
+        </Flex>
+      </Flex>
+      <Rating count={1} size={"lg"} color="purple.5" />
+    </Flex>
   );
 };

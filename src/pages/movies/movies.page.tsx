@@ -1,14 +1,17 @@
-import { FiltersSection } from "../../widgets/filters/ui/filters-section";
+import { Stack } from "@mantine/core";
 import { MainContainer } from "../../shared/ui/main-container/main-container";
 import { MainTitle } from "../../shared/ui/main-title/main-title";
-import { MoviesList } from "../../features/movies-list";
+import { FiltersSection } from "../../widgets/filters";
+import { MoviesWithPagination } from "../../widgets/movies-with-pagination";
 
 export const MoviesPage = () => {
   return (
     <MainContainer size="md">
       <MainTitle>Movies</MainTitle>
-      <FiltersSection />
-      <MoviesList />
+      <Stack gap={24}>
+        <FiltersSection />
+        <MoviesWithPagination />
+      </Stack>
     </MainContainer>
   );
 };

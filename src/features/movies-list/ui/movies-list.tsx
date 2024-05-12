@@ -2,20 +2,15 @@ import { useSelector } from "react-redux";
 import { Group } from "@mantine/core";
 import { RootState } from "../../../app";
 import {
-  Movie,
   MoviesWithGenresLabel,
-  SelectDataType,
+  getMoviesState,
 } from "../../../shared/type/type";
 import { CardMovie } from "../../../entities/card-movie";
 
 export const MoviesList = () => {
-  const movies = useSelector<RootState>(
-    (state) => state.movies.movies
-  ) as Movie[];
-
-  const genres = useSelector<RootState>(
-    (state) => state.movies.genres
-  ) as SelectDataType[];
+  const { movies, genres } = useSelector<RootState>(
+    (state) => state.movies
+  ) as getMoviesState;
 
   const genreMap = genres.reduce((acc: Record<string, string>, genre) => {
     acc[genre.value] = genre.label;
